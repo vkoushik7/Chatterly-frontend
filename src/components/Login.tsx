@@ -44,7 +44,7 @@ function Login() {
         //setError("Login successful. Redirecting to home page...");
         setTimeout(() => {
           window.location.href = "/dashboard";
-        }, 2000);
+        }, 1000);
       }
     } catch (error) {
       console.error("Error occurred while LOGIN", error);

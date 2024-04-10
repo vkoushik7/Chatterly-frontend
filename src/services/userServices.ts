@@ -9,6 +9,12 @@ interface UserData {
   email: string;
 }
 
+interface UserDataChange {
+  name: string;
+  username: string;
+  email: string;
+}
+
 let userData: UserData;
 
 const getUserData = async (): Promise<UserData> => {
@@ -35,27 +41,60 @@ const getUserData = async (): Promise<UserData> => {
   }
 };
 
-const changeUserData = async (data: UserData): Promise<UserData> => {
+const changeUserData = async (data: UserDataChange): Promise<string> => {
     const token = localStorage.getItem('auth-token');
     if (!token) {
         throw new Error('Token not found');
     }
     try {
         const res = await axios.put(`${API_URL}/users`, {
+              name: `${data.name}`,
+              username: `${data.username}`,
+              email: `${data.email}`,
+            }, {
             headers: {
-                'Content-Type': 'application/json',
-                'x-auth-token': `${token}`,
-            },
-            data: {
-                name: `${data.name}`,
-                username: `${data.username}`,
-                email: `${data.email}`,
-            }
+              'Content-Type': 'application/json',
+              'x-auth-token': `${token}`,
+          },
         });
-        return res.data as UserData;
-    } catch (error) {
-        console.error('Error occurred while updating user data', error);
-        throw new Error('Error occurred while updating user data');
+        if (res.status === 200) {
+          return "User data updated successfully";
+        }
+        else {
+            console.log(res.data);
+            throw new Error(String(res.data));
+        }
+    } catch (error: any) {
+      console.log(error);
+      throw new Error(String(error.response.data));
+    }
+};
+
+const changePassword = async (data: { oldPassword: string; newPassword: string }): Promise<string> => {
+    const token = localStorage.getItem('auth-token');
+    if (!token) {
+        throw new Error('Token not found');
+    }
+    try {
+        const res = await axios.put(`${API_URL}/users/password`, {
+              oldPassword: `${data.oldPassword}`,
+              newPassword: `${data.newPassword}`,
+            }, {
+            headers: {
+              'Content-Type': 'application/json',
+              'x-auth-token': `${token}`,
+          },
+        });
+        if (res.status === 200) {
+          return "Password updated successfully";
+        }
+        else {
+            console.log(res.data);
+            throw new Error(String(res.data));
+        }
+    } catch (error: any) {
+      console.log(error);
+      throw new Error(String(error.response.data));
     }
 };
 
@@ -67,4 +106,4 @@ const logOut = () => {
     localStorage.removeItem('auth-token');
     window.location.href = '/login';
 }
-export { getUserData, changeUserData, logOut};
+export { getUserData, changeUserData,changePassword, logOut};
