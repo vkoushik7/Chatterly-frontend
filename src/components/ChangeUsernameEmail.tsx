@@ -33,6 +33,7 @@ function ChangeUsernameEmail() {
   }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setError("");
     setFormData({ ...formData, [e.target.id]: e.target.value });
   };
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -104,7 +105,15 @@ function ChangeUsernameEmail() {
         {error && <p className="text-red-500 mb-2">{error}</p>}
         <button
           type="submit"
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+          className={`bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded ${
+            !initialData ||
+            (initialData.name === formData.newName &&
+              initialData.username === formData.newUsername &&
+              initialData.email === formData.newEmail)
+              ? "opacity-50 cursor-not-allowed"
+              : ""
+          } m-2
+          }`}
           disabled={
             !initialData ||
             (initialData.name === formData.newName &&

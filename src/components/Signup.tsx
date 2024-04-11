@@ -52,7 +52,7 @@ function Signup() {
         setError("Account successfully created. Redirecting to login page...");
         setTimeout(() => {
           window.location.href = "/login";
-        }, 2000);
+        }, 1000);
       }
     } catch (error) {
       console.error("Error occurred while signing up", error);

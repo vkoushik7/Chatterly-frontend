@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import login from "../services/login";
+import { escape } from "validator";
 
 interface LoginData {
   email: string;
@@ -30,11 +31,21 @@ function Login() {
       setError("Password is required");
       return;
     }
+    const sanitizedEmail: string = escape(formData.email) as string;
+    const sanitizedPassword: string = escape(formData.password) as string;
+    if (!sanitizedEmail) {
+      setError("Email is required");
+      return;
+    }
+    if (!sanitizedPassword) {
+      setError("Password is required");
+      return;
+    }
     setError("");
     console.log("Form submitted");
     const loginData: LoginData = {
-      email: formData.email,
-      password: formData.password,
+      email: sanitizedEmail,
+      password: sanitizedPassword,
     };
 
     try {
@@ -44,7 +55,7 @@ function Login() {
         //setError("Login successful. Redirecting to home page...");
         setTimeout(() => {
           window.location.href = "/dashboard";
-        }, 1000);
+        }, 500);
       }
     } catch (error) {
       console.error("Error occurred while LOGIN", error);

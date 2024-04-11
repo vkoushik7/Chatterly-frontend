@@ -10,6 +10,7 @@ function ChangePassword() {
   const [error, setError] = useState<string>("");
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setError("");
     setFormData({ ...formData, [e.target.id]: e.target.value });
   };
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
