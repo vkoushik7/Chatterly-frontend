@@ -1,5 +1,13 @@
 import { Link } from "react-router-dom";
+import { useEffect } from "react";
+
 function Home() {
+  useEffect(() => {
+    const token = localStorage.getItem("auth-token");
+    if (token) {
+      window.location.href = "/dashboard";
+    }
+  }, []);
   return (
     <div className="flex flex-col items-center justify-center bg-gray-800 text-white h-screen">
       <h1 className="text-2xl mb-4">Chatting</h1>

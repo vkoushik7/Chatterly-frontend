@@ -1,8 +1,15 @@
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import signup from "../services/signup";
+import { useEffect } from "react";
 
 function Signup() {
+  useEffect(() => {
+    const token = localStorage.getItem("auth-token");
+    if (token) {
+      window.location.href = "/dashboard";
+    }
+  }, []);
   const [formData, setFormData] = useState({
     name: "",
     username: "",

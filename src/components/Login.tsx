@@ -1,7 +1,6 @@
 import { Link } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import login from "../services/login";
-import { escape } from "validator";
 
 interface LoginData {
   email: string;
@@ -13,6 +12,12 @@ interface LoginResponse {
 }
 
 function Login() {
+  useEffect(() => {
+    const token = localStorage.getItem("auth-token");
+    if (token) {
+      window.location.href = "/dashboard";
+    }
+  }, []);
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -31,21 +36,11 @@ function Login() {
       setError("Password is required");
       return;
     }
-    const sanitizedEmail: string = escape(formData.email) as string;
-    const sanitizedPassword: string = escape(formData.password) as string;
-    if (!sanitizedEmail) {
-      setError("Email is required");
-      return;
-    }
-    if (!sanitizedPassword) {
-      setError("Password is required");
-      return;
-    }
     setError("");
     console.log("Form submitted");
     const loginData: LoginData = {
-      email: sanitizedEmail,
-      password: sanitizedPassword,
+      email: formData.email,
+      password: formData.password,
     };
 
     try {
@@ -73,7 +68,7 @@ function Login() {
       <h1 className="text-2xl mb-4">Login</h1>
       <form className="flex flex-col items-center" onSubmit={handleSubmit}>
         <input
-          type="text"
+          type="email"
           placeholder="Email"
           name="email"
           value={formData.email}
